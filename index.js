@@ -1,6 +1,10 @@
 require('dotenv').config();
+const http = require('http');
 const axios = require('axios');
 const twilio = require('twilio');
+
+// Render يحتاج port مفتوح
+http.createServer((req, res) => res.end('ok')).listen(process.env.PORT || 3001);
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
@@ -39,10 +43,10 @@ async function checkMessages() {
         hour12: true,
       });
 
-      const notification = `✅ <b>SMS مُرسَل</b>
-📞 إلى: <code>${msg.to}</code>
-📤 من: <code>${msg.from}</code>
-💬 النص: ${msg.body}
+      const notification = `✅ <b>SMS Sent</b>
+📞 To: <code>${msg.to}</code>
+📤 From: <code>${msg.from}</code>
+💬 Body: ${msg.body}
 🕐 ${time}`;
 
       await sendToTelegram(notification);
@@ -53,9 +57,9 @@ async function checkMessages() {
   }
 }
 
-// تشغيل فوري ثم كل 10 ثواني
+// run immediately then every 10 seconds
 checkMessages();
 setInterval(checkMessages, 10 * 1000);
 
-console.log('✅ Twilio Monitor شغال — يفحص كل دقيقة');
-sendToTelegram('🚀 <b>Twilio Monitor جاهز</b>\nيراقب الرسائل كل دقيقة.');
+console.log('✅ Twilio Monitor running — checking every 10 seconds');
+sendToTelegram('🚀 <b>Twilio Monitor is live</b>\nMonitoring messages every 10 seconds.');
