@@ -32,7 +32,7 @@ async function checkMessages() {
 
       // فقط الرسائل المرسلة (outbound) خلال آخر 5 دقائق
       const age = (Date.now() - new Date(msg.dateCreated).getTime()) / 1000 / 60;
-      if (msg.direction !== 'outbound-api' || age > 5) continue;
+      if (msg.direction !== 'outbound-api' || age > 2) continue;
 
       const time = new Date(msg.dateCreated).toLocaleString('ar-SA', {
         timeZone: 'Asia/Riyadh',
@@ -53,9 +53,9 @@ async function checkMessages() {
   }
 }
 
-// تشغيل فوري ثم كل دقيقة
+// تشغيل فوري ثم كل 10 ثواني
 checkMessages();
-setInterval(checkMessages, 60 * 1000);
+setInterval(checkMessages, 10 * 1000);
 
 console.log('✅ Twilio Monitor شغال — يفحص كل دقيقة');
 sendToTelegram('🚀 <b>Twilio Monitor جاهز</b>\nيراقب الرسائل كل دقيقة.');
